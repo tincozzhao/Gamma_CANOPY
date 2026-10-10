@@ -31,7 +31,6 @@ public class OpMode3 extends LinearOpMode {
         robot.init(hardwareMap);
 
         // Put initialization blocks here.
-        int liftBasePosition0 = robot.liftArm.getCurrentPosition();
 
         waitForStart();
         while (opModeIsActive()) {
@@ -71,79 +70,40 @@ public class OpMode3 extends LinearOpMode {
             // 3) in Java code, use class "CRServo"
             if (gamepad2.left_stick_y > 0.7) { //if joystick moved up
                 //misumi slide extends
-                robot.misumiSlide.setPower(-1.0);
+                robot.servo1.setPower(-1.0);
+                robot.servo0.setPower(-1.0);
             }
             else if(gamepad2.left_stick_y < -0.7) {// if joystick moves down
                 // misumi slide retract
-                robot.misumiSlide.setPower(1.0);
+                robot.servo1.setPower(1.0);
+                robot.servo0.setPower(1.0);
             }
             else { //stop
-                robot.misumiSlide.setPower(0.0);
+                robot.servo1.setPower(0.0);
+                robot.servo0.setPower(0.0);
             }
 
 
 //linear slide
-            if (gamepad2.right_stick_y < -0.7) { //when sticky y is on, going up
-//                robot.liftArm.setTargetPosition(500);
-//                robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.liftArm.setPower(BotCoefficients.SLIDER_UP_POWER);
-                bMoveUpSlider = true;
-            }
-            else if (gamepad2.right_stick_y > 0.7) { //if sticky y is on, go down
-               robot.liftArm.setPower(BotCoefficients.SLIDER_DOWN_POWER);
-               bMoveUpSlider = false;
-            }
-            else {
-                if (bMoveUpSlider) { // if last slider action is going up, hold slider
-                    robot.liftArm.setPower(BotCoefficients.SLIDER_HOLD_POWER);
-                }
-                else { // otherwise, no needs to hold slider power.
-                    robot.liftArm.setPower(0);
-                }
-            }
+//            if (gamepad2.right_stick_y < -0.7) { //when sticky y is on, going up
+////                robot.liftArm.setTargetPosition(500);
+////                robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                robot.liftArm.setPower(BotCoefficients.SLIDER_UP_POWER);
+//                bMoveUpSlider = true;
+//            }
+//            else if (gamepad2.right_stick_y > 0.7) { //if sticky y is on, go down
+//               robot.liftArm.setPower(BotCoefficients.SLIDER_DOWN_POWER);
+//               bMoveUpSlider = false;
+//            }
+//            else {
+//                if (bMoveUpSlider) { // if last slider action is going up, hold slider
+//                    robot.liftArm.setPower(BotCoefficients.SLIDER_HOLD_POWER);
+//                }
+//                else { // otherwise, no needs to hold slider power.
+//                    robot.liftArm.setPower(0);
+//                }
+//            }
 
-//grabberX on horizontal (misumi slide)
-            if (gamepad2.left_trigger > 0.5) {
-                robot.grabberX.setPosition(0.4); // open
-            }
-            else if (gamepad2.left_bumper) {
-                robot.grabberX.setPosition(0.65); // close
-            }
-            else {
-              //  robot.grabberX.setPosition(0);
-            }
-
-            if (gamepad2.dpad_up) {
-                robot.grabberXtilt.setPosition(1); // tilt up grabber
-            }
-            else if (gamepad2.dpad_down) {
-                robot.grabberXtilt.setPosition(0.1); // tilt down grabber
-            }
-            else {
-                //  robot.grabberX.setPosition(0);
-            }
-
-
-//grabberY (linearslide)
-            if (gamepad2.right_trigger > 0.5) {
-                robot.grabberY.setPosition(BotCoefficients.grabberYOpen); // open
-           } else if (gamepad2.right_bumper) {
-                robot.grabberY.setPosition(BotCoefficients.grabberYClose); // close
-            } else{
-               // robot.grabberY.setPosition(0.0);
-            }
-
-//tilt servo on Y vertical slide
-            if (gamepad2.y) {
-                robot.grabberYtilt.setPosition(BotCoefficients.grabberYtiltUp);    // tilt up
-
-            } else if (gamepad2.a) {
-                robot.grabberYtilt.setPosition(BotCoefficients.grabberYtiltDown);      // tilt down
-                // AND open the grabber
-
-            } else {
-                // robot.grabberYtilt.setPosition(0);
-            }
 
 //tilt servo #2
             /*

@@ -30,16 +30,11 @@ public class RobotHardware {
     public DcMotor motorbl = null;
 
 
-      public DcMotor liftArm = null;
-
       public DcMotor launcher = null;
 
-    public CRServo misumiSlide = null;
-     public Servo grabberXtilt = null; // tilt servo horizontal
-     public Servo grabberX = null;
+    public CRServo servo1 = null;
+    public CRServo servo0 = null;
 
-     public Servo grabberYtilt; //tilt servo vertical (2nd stage)
-     public Servo grabberY = null;
 
 
     //public Servo airplaneLauncher = null;
@@ -71,14 +66,10 @@ public class RobotHardware {
         motorbr = hwMap.get(DcMotor.class, "motorbr");
         //launcher = hwMap.get(DcMotor.class, "launcher");
 
-        liftArm = hwMap.get(DcMotor.class, "liftArm");
         // Horizontal slide
-        misumiSlide = hwMap.get(CRServo.class, "misumiSlide");
+        servo1 = hwMap.get(CRServo.class, "servo1");
+        servo0 = hwMap.get(CRServo.class, "servo0");
 
-        grabberYtilt = hwMap.get(Servo.class, "grabberYtilt");
-        grabberY = hwMap.get(Servo.class, "grabberY");
-        grabberXtilt = hwMap.get(Servo.class, "grabberXtilt");
-        grabberX = hwMap.get(Servo.class, "grabberX");
 
         // set Brake zero power behavior
         motorfr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -92,10 +83,10 @@ public class RobotHardware {
         // LiftArm motor reset
 //        liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftArm.setPower(0);
 
-        misumiSlide.setPower(0);
+
+        servo1.setPower(0);
+        servo0.setPower(0);
 
         //motorbr.setDirection(DcMotor.Direction.REVERSE);
 

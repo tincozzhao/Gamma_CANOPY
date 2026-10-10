@@ -2,18 +2,16 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 
-public class DriveChain {
+public class DriveTrain {
     /* Declare OpMode members. */
     HardwareMap hwMap =  null;
 
@@ -39,7 +37,7 @@ public class DriveChain {
     public double yaw0;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
-    public DriveChain() {}
+    public DriveTrain() {}
 
     /**
      * Initialize all the robot's hardware.
