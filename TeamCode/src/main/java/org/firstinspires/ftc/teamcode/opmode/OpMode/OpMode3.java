@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
@@ -19,7 +21,8 @@ public class OpMode3 extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
 
     private int sleepMs1 = 0;
-    private boolean bMoveUpSlider = false;
+    private boolean bMoveUpHogback = false;
+    private boolean wasPusherMoving = false;
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -51,9 +54,6 @@ public class OpMode3 extends LinearOpMode {
             brPower = brPower / scaling;
             robot.setDrivePower(flPower, frPower, blPower, brPower);
 
-            // robot.setDrivePower(vertical + turn + horizontal, vertical
-            // - turn - horizontal, vertical + turn - horizontal, vertical - turn + horizontal);
-
             telemetry.addLine(String.format("FL: %d \nBL %d \nFR: %d \nBR: %d ",
                     robot.motorfl.getCurrentPosition(),
                     robot.motorbl.getCurrentPosition(),
@@ -63,107 +63,47 @@ public class OpMode3 extends LinearOpMode {
 
 
 //make sure one of the directions is correct/reversed
-            //misumi slide start
-            // To use continuous servo:
-            // 1) change to continuous  rotation servo by using servo programmer
-            // 2) on driver station, configured it as continuous rotation servo
-            // 3) in Java code, use class "CRServo"
-            if (gamepad2.left_stick_y > 0.7) { //if joystick moved up
-                //misumi slide extends
-                robot.servo1.setPower(-1.0);
-                robot.servo0.setPower(-1.0);
-            }
-            else if(gamepad2.left_stick_y < -0.7) {// if joystick moves down
-                // misumi slide retract
-                robot.servo1.setPower(1.0);
-                robot.servo0.setPower(1.0);
-            }
-            else { //stop
-                robot.servo1.setPower(0.0);
-                robot.servo0.setPower(0.0);
-            }
 
+            if (gamepad2.left_trigger_pressed) {
+                robot.pusher0.setPower(-1.0);
+                wasPusherMoving = true;
+            } else if (gamepad2.left_bumper) {
+                robot.pusher0.setPower(1.0);
+                wasPusherMoving = true;
+            } else {
+                // fire a tiny counter-pulse to stop movement
+                if (wasPusherMoving) {
+                    double brakePower;
+                    if (robot.pusher0.getPower() < 0) { // 2 conditions: forward or backward
+                        brakePower = 0.4;   // pulse backward
+                    } else {
+                        brakePower = -0.4;  // pulse forward
+                    }
+                    robot.pusher0.setPower(brakePower);
+                    sleep(30); // 30ms hardware pulse to stop completely
+                    wasPusherMoving = false;
+                }
 
-//linear slide
-//            if (gamepad2.right_stick_y < -0.7) { //when sticky y is on, going up
-////                robot.liftArm.setTargetPosition(500);
-////                robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.liftArm.setPower(BotCoefficients.SLIDER_UP_POWER);
-//                bMoveUpSlider = true;
-//            }
-//            else if (gamepad2.right_stick_y > 0.7) { //if sticky y is on, go down
-//               robot.liftArm.setPower(BotCoefficients.SLIDER_DOWN_POWER);
-//               bMoveUpSlider = false;
-//            }
-//            else {
-//                if (bMoveUpSlider) { // if last slider action is going up, hold slider
-//                    robot.liftArm.setPower(BotCoefficients.SLIDER_HOLD_POWER);
-//                }
-//                else { // otherwise, no needs to hold slider power.
-//                    robot.liftArm.setPower(0);
-//                }
-//            }
-
-
-//tilt servo #2
-            /*
-            if (gamepad2.left_stick_y > 0.7) {
-                robot.grabberYtilt.setPosition(0.0);
-
-            } else if (gamepad2.left_stick_y < -0.7) {
-                robot.grabberYtilt.setPosition(0.6);
+                // Hard stop signal
+                robot.pusher0.setPower(0.0);
             }
 
-*/
+
+
+            // 1. Moving Forward
+            if (gamepad2.right_stick_y < -0.7) {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
+            }
+// 2. Moving Backward
+            else if (gamepad2.right_stick_y > 0.7) {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERDOWN);
+            }
+// 3. Joystick is back in the neutral/original position
+            else {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_STOP); // Sets power to 0.0
+            }
         }
 
 
-        //emergency releases
     }
-
-
-    void liftHexArm(int ticks, double power, long timeOutMills) {
-        long timeCurrent, timeBegin;
-        timeBegin = timeCurrent = System.currentTimeMillis();
-        {
-
-        }
-
-
-
-     /*
-
-        robot.liftHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.liftHex.setTargetPosition(ticks);
-        robot.liftHex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.liftHex.setPower(power);
-        while(opModeIsActive()
-                && robot.liftHex.isBusy()
-                && (timeCurrent - timeBegin) < timeOutMills) {
-            timeCurrent = System.currentTimeMillis();
-
-
-
-
-
-    private void TiltLiftOne ( double crankPowerBegin, int crankTimeMs, double crankPowerEnd,
-        double liftPowerBegin, int liftTimeMs, double liftPowerEnd){
-            //tilt the lift to be upright
-            robot.liftHex.setPower(crankPowerBegin);   //set motor power
-            sleep(crankTimeMs);          // let motor run for some time seconds.
-            robot.liftHex.setPower(crankPowerEnd);   //set lower motor power to maintain the position
-
-            // Extend liftArm
-            robot.liftArm.setPower(liftPowerBegin);
-            sleep(liftTimeMs);             // let motor run for some time seconds.
-            robot.liftArm.setPower(liftPowerEnd);
-
-        }
-
-        }
-
-
-      */
-
-        }
-    }
+}

@@ -30,9 +30,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients;
 
 /*
  * This OpMode illustrates the concept of driving a path based on time.
@@ -53,8 +50,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name=" Auto: Blue Net Zone ", group="Robot")
-public class Blue_Net_Zone extends AutoHardware {
+@Autonomous(name=" Auto: Blue Specimen Placement ", group="Robot")
+public class leave_parkingzone extends AutoHardware {
 
     @Override
     public void runOpMode() {
@@ -65,35 +62,14 @@ public class Blue_Net_Zone extends AutoHardware {
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
-        grabberXtilt.setPosition(0.8);
-
-        grabberX.setPosition(1.0);
-
         sleep(2000);
-
+        // /extends out as neg;
 
         encoderDrive(0.3,  38,  38, 9);
 
         sleep(2000);
 
-        grabberX.setPosition(0.1);
-
-        sleep(500);
-        // turn 90deg clockwise
-        turnToTargetYaw(-90, .2, 1000);
-
-        encoderDrive(0.3,  56,  53, 5);
-        turnToTargetYaw(90, .2, 1000);
-        encoderDrive(0.3,  -56,  -53, 3);
-
-        sleep(1000);
-      //  extender.setTargetPosition(BotCoefficients.SLIDER_LOW_BAR_HEIGHT);
-      //  extender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      //  extender.setPower(Math.abs(BotCoefficients.SLIDER_UP_SPEED));
-        sleep(10000);
-      //  extender.setPower(0);
 
     }
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -30,14 +31,10 @@ public class RobotHardware {
     public DcMotor motorbl = null;
 
 
-      public DcMotor launcher = null;
+    public DcMotor hogback = null;
 
-    public CRServo servo1 = null;
-    public CRServo servo0 = null;
-
-
-
-    //public Servo airplaneLauncher = null;
+    public CRServo pusher0 = null;
+   public Limelight3A limelight;
 
     public IMU imu;
 
@@ -64,11 +61,9 @@ public class RobotHardware {
         motorfr = hwMap.get(DcMotor.class, "motorfr");
         motorbl = hwMap.get(DcMotor.class, "motorbl");
         motorbr = hwMap.get(DcMotor.class, "motorbr");
-        //launcher = hwMap.get(DcMotor.class, "launcher");
-
-        // Horizontal slide
-        servo1 = hwMap.get(CRServo.class, "servo1");
-        servo0 = hwMap.get(CRServo.class, "servo0");
+        hogback = hwMap.get(DcMotor.class, "hogback");
+        limelight = hwMap.get(Limelight3A.class, "limelight");
+        pusher0 = hwMap.get(CRServo.class, "pusher0");
 
 
         // set Brake zero power behavior
@@ -76,42 +71,12 @@ public class RobotHardware {
         motorfl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorfr.setDirection(DcMotor.Direction.REVERSE);
         motorbr.setDirection(DcMotor.Direction.REVERSE);
-      //  motorbl.setDirection(DcMotor.Direction.REVERSE);
 
-        // LiftArm motor reset
-//        liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-        servo1.setPower(0);
-        servo0.setPower(0);
-
-        //motorbr.setDirection(DcMotor.Direction.REVERSE);
-
-
-        // Define and initialize ALL installed servos.
-
-        //airplaneLauncher = hwMap.get(Servo.class, "feeder");
-        //tiltServoRight = hwMap.get(Servo.class, "tiltServoR");
-        //grabServoRight = hwMap.get(Servo.class, "grabServoR");
-        // tiltServoLeft = hwMap.get(Servo.class, "tiltServoL");
-        // grabServoLeft = hwMap.get(Servo.class, "grabServoL");
-        //autoPixel.setPosition(0.5);
-        //boardPixel.setPosition(0);
-        //grabServo.setPosition(0.4);
-
-        // Get distance sensors
-        //distanceR = hwMap.get(DistanceSensor.class, "distanceR");
-        //distanceL = hwMap.get(DistanceSensor.class, "distanceL");
-
-        // Set airplane launcher default servo position
-        //airplaneLauncher.setPosition(0);
-
-        // reverse motor directions
-        //motorbl.setDirection(DcMotor.Direction.REVERSE);
-        //motorfl.setDirection(DcMotorSimple.Direction.REVERSE);
+        pusher0.setPower(0);
+        limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         setDrivetrainMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -157,9 +122,6 @@ public class RobotHardware {
         motorfr.setMode(mode);
         motorbl.setMode(mode);
         motorbr.setMode(mode);
-    }
-    public void setArmsMode(DcMotor.RunMode mode) {
-        //linearSlider.setMode(mode);
     }
     public void setDriveForward(double fl, double fr, double bl, double br){
         if (fl > 1.0)
@@ -227,27 +189,3 @@ public class RobotHardware {
 
 
 }
-/*
-   port 1 motorfl
-   port 2 motorbl
-   port 3 motorap
-   extension hub port 0 motorfr
-   extension hub port 1 motorbr
-   extension hub port 2 liftArm
-   extension hub port 3 liftHex
-
-   Servos
-   port 0 boardPixel
-   port 1 grabServo
-   port 2 tiltServo
-
-   extension hub port 0 autoPixel
-   extension hub port 1 feeder
-
-
-   //Controls//
-   Gamepad 1:
-
-     */
-
-

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -26,8 +27,7 @@ public abstract class AutoHardware extends LinearOpMode {
 
     protected DcMotor         frontrightDrive  = null;
 
-    protected DcMotor         misumiSlide  = null;
-    protected DcMotor         liftArm  = null;
+    protected DcMotor         hogback  = null;
 
     protected ElapsedTime     runtime = new ElapsedTime();
 
@@ -80,12 +80,7 @@ public abstract class AutoHardware extends LinearOpMode {
     protected AprilTagProcessor aprilTag;
 
     // servo to place pixel on backboard
-    public Servo grabberYtilt = null;
-    public Servo grabberY = null;
-
-    public Servo grabberX = null;
-
-    public Servo grabberXtilt = null;
+    public CRServo pusher0 = null;
 
     public void initAll(){
        // initTfodAndAprilTag();
@@ -94,13 +89,9 @@ public abstract class AutoHardware extends LinearOpMode {
         initIMU();
     }
     public void initServo() {
-        grabberYtilt = hardwareMap.get(Servo.class, "grabberYtilt");
-       // grabberTilt.setPosition(1);
-        grabberY = hardwareMap.get(Servo.class, "grabberY");
-       // grabberR = hardwareMap.get(Servo.class, "grabberR");
-       // grabberR.setPosition(0.6);
-        grabberXtilt = hardwareMap.get(Servo.class, "grabberXtilt");
-        grabberX = hardwareMap.get(Servo.class, "grabberX");
+        pusher0 = hardwareMap.get(CRServo.class, "pusher0");
+        //grabberTilt.setPosition(1);
+
 
        // misumiSlide = hardwareMap.get(DcMotor.class, "misumiSlide");
 
@@ -113,12 +104,11 @@ public abstract class AutoHardware extends LinearOpMode {
 
     public void initArm() {
 
-        liftArm = hardwareMap.get(DcMotor.class, "liftArm");
+        hogback = hardwareMap.get(DcMotor.class, "liftArm");
 
-        liftArm.setTargetPosition(BotCoefficients.SLIDER_BOTTOM_POSITION);
-        liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftArm.setPower(Math.abs(BotCoefficients.SLIDER_UP_SPEED));
+        hogback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //lifter = hardwareMap.get(DcMotor.class, "lifter");
         //rotator.setPower(0);
         //lifter.setPower(0);
