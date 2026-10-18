@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name=" Auto: Blue Specimen Placement ", group="Robot")
+@Autonomous(name="leave_parkingzone", group="Robot")
 public class leave_parkingzone extends AutoHardware {
 
     @Override
@@ -66,7 +66,7 @@ public class leave_parkingzone extends AutoHardware {
         sleep(2000);
         // /extends out as neg;
 
-        encoderDrive(0.3,  38,  38, 9);
+        encoderDrive(0.5,  50,  50, 9);
 
         sleep(2000);
 

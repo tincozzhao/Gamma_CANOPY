@@ -65,10 +65,10 @@ public class OpMode3 extends LinearOpMode {
 //make sure one of the directions is correct/reversed
 
             if (gamepad2.left_trigger_pressed) {
-                robot.pusher0.setPower(-1.0);
+                robot.pusher0.setPower(1.0);
                 wasPusherMoving = true;
             } else if (gamepad2.left_bumper) {
-                robot.pusher0.setPower(1.0);
+                robot.pusher0.setPower(-1.0);
                 wasPusherMoving = true;
             } else {
                 // fire a tiny counter-pulse to stop movement
@@ -91,11 +91,11 @@ public class OpMode3 extends LinearOpMode {
 
 
             // 1. Moving Forward
-            if (gamepad2.right_stick_y < -0.7) {
+            if (gamepad2.right_stick_y > 0.5 ) {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
             }
 // 2. Moving Backward
-            else if (gamepad2.right_stick_y > 0.7) {
+            else if (gamepad2.right_stick_y < -0.5) {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_POWERDOWN);
             }
 // 3. Joystick is back in the neutral/original position

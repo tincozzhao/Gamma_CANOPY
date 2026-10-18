@@ -90,28 +90,16 @@ public abstract class AutoHardware extends LinearOpMode {
     }
     public void initServo() {
         pusher0 = hardwareMap.get(CRServo.class, "pusher0");
-        //grabberTilt.setPosition(1);
-
-
-       // misumiSlide = hardwareMap.get(DcMotor.class, "misumiSlide");
-
-       // misumiSlide.setTargetPosition(BotCoefficients.SLIDER_BOTTOM_POSITION);
-       // misumiSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       // misumiSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //misumiSlide.setPower(Math.abs(BotCoefficients.SLIDER_UP_SPEED));
 
     }
 
-    public void initArm() {
+    public void initHogback() {
 
-        hogback = hardwareMap.get(DcMotor.class, "liftArm");
+        hogback = hardwareMap.get(DcMotor.class, "hogback");
 
         hogback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //lifter = hardwareMap.get(DcMotor.class, "lifter");
-        //rotator.setPower(0);
-        //lifter.setPower(0);
     }
     public void initMotor(){
         // Initialize the drive system variables.
@@ -135,7 +123,7 @@ public abstract class AutoHardware extends LinearOpMode {
         frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
 
 
-        initArm();
+        initHogback();
     }
 
     public void encoderDrive(double speed,
@@ -224,140 +212,6 @@ public abstract class AutoHardware extends LinearOpMode {
         backleftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-  /* public void driveToBackBoardByAprilTag(int targetId) {
-        //adjustment position according to apriltag
-        double xPos = 10;
-        double yPos = 10;
-        int maxTries = 0;
-        int idSeen = 0;
-        int strafetime = 100;
-        while (((xPos > 1) || (xPos < -1)) && (maxTries < 100)) {
-            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-            telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-            idSeen = 0;
-            // Step through the list of detections and display info for each one.
-
-            for (AprilTagDetection detection : currentDetections) {
-
-                idSeen = detection.id;
-
-
-
-                if (detection.metadata != null) {
-                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                    telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                    telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-                } else {
-                    telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                    telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-                }
-
-                if (detection.id == targetId) {
-                    xPos = detection.ftcPose.x;
-                    break;
-                }
-                else {
-                    if (idSeen > 0) {
-                        if (targetId < idSeen) {
-                            xPos = -10;
-                        } else {
-                            xPos = 10;
-                        }
-                    }
-                }
-
-            }   // end for() loop
-
-            if (idSeen > 0) {
-                telemetry.addLine(String.format("Target found! xPos is %6.1f (inch)", xPos));
-                telemetry.update();
-                if (xPos > 6 || xPos < -6) {
-                    strafetime = 700;
-                }
-                else {
-                    strafetime = 100;
-                }
-                if (xPos > -2.0) {
-                    strafe(0.3, strafetime);
-                } else if (xPos < -4.0) {
-                    strafe(-0.3, strafetime);
-                } else {
-                    break;
-                }
-            }
-            sleep(20);
-            maxTries++;
-        }
-    }
-*/
-  /*  public void strafe(double power, int milliseconds) {
-
-        frontleftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backleftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontrightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backrightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        frontleftDrive.setPower(power);
-        backleftDrive.setPower(-power);
-        frontrightDrive.setPower(-power);
-        backrightDrive.setPower(power);
-        sleep(milliseconds);
-        turnToTargetYaw2(90+yaw0, 0.4, 5000);
-        frontleftDrive.setPower(0);
-        backleftDrive.setPower(0);
-        frontrightDrive.setPower(0);
-        backrightDrive.setPower(0);
-
-    }
-    public void dropPixelOnLine() {
-        grabberR.setPosition(0);
-        //grabberL.setPosition(0);
-        sleep(1000);
-        grabberTilt.setPosition(1);
-    }
-    public void dropPixelOnBoard() {
-
-    }
-
-    public void forward(double power, int milliseconds) {
-        frontleftDrive.setPower(power);
-        frontrightDrive.setPower(power);
-        backleftDrive.setPower(power);
-        backrightDrive.setPower(power);
-
-        sleep(milliseconds);
-        stopRobot();
-    }
-    public void backward(double power, int milliseconds){
-        frontleftDrive.setPower(-power);
-        frontrightDrive.setPower(-power);
-        backleftDrive.setPower(-power);
-        backrightDrive.setPower(-power);
-
-        sleep(milliseconds);
-        stopRobot();
-    }
-
-  */
-    public void stopRobot(){
-        frontleftDrive.setPower(0);
-        frontrightDrive.setPower(0);
-        backleftDrive.setPower(0);
-        backrightDrive.setPower(0);
-    }
-
-   /* public void turn(double powerLeft, double powerRight, long milliseconds){
-        frontleftDrive.setPower(powerLeft);
-        frontrightDrive.setPower(powerRight);
-        backleftDrive.setPower(powerLeft);
-        backrightDrive.setPower(powerRight);
-        sleep(milliseconds);
-        stopRobot();
-    }
-    */
-
     public void initIMU(){
         // Initialize IMU in the control hub
         //                                                                              Yaw: goes counter-clockwise
@@ -381,79 +235,7 @@ public abstract class AutoHardware extends LinearOpMode {
     public double getCurrentYaw() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
-   /* private void driveStrafe(int flTarget, int blTarget, int frTarget, int brTarget,
-                             double power,
-                             boolean bKeepYaw, double targetYaw){
-        double currentYaw, diffYaw;
-        double powerDeltaPct, powerL, powerR;
-        int direction;
 
-        frontleftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backleftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontrightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backrightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontleftDrive.setTargetPosition(flTarget);
-        backleftDrive.setTargetPosition(blTarget);
-        frontrightDrive.setTargetPosition(frTarget);
-        backrightDrive.setTargetPosition(brTarget);
-
-        frontleftDrive.setPower(power);
-        backleftDrive.setPower(power);
-        frontrightDrive.setPower(power);
-        backrightDrive.setPower(power);
-
-        frontleftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backleftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontrightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backrightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Defensive programming.
-        // Use bKeepYaw only when all targets are the same, meaning moving in a straight line
-        if (! ((flTarget == blTarget)
-                && (flTarget == frTarget)
-                && (flTarget == brTarget)) )
-            bKeepYaw = false;
-        direction = (flTarget > 0) ? 1 : -1;
-        while(opModeIsActive() &&
-                (frontleftDrive.isBusy() &&
-                        backleftDrive.isBusy() &&
-                        frontrightDrive.isBusy() &&
-                        backrightDrive.isBusy())){
-            if (bKeepYaw) {
-
-                currentYaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-                if (Math.abs(currentYaw - targetYaw) > 2.0)
-                    powerDeltaPct = 0.25;
-                else
-                    powerDeltaPct = Math.abs(currentYaw - targetYaw) / 2.0 * 0.25;
-                if (currentYaw < targetYaw) {
-                    powerL = power * (1 - direction * powerDeltaPct);
-                    powerR = power * (1 + direction * powerDeltaPct);
-                }
-                else {
-                    powerL = power * (1 + direction * powerDeltaPct);
-                    powerR = power * (1 - direction * powerDeltaPct);
-                }
-                if (powerL > 1.0)
-                    powerL = 1.0;
-                if (powerR > 1.0)
-                    powerR = 1.0;
-                frontleftDrive.setPower(powerL);
-                backleftDrive.setPower(powerL);
-                frontrightDrive.setPower(powerR);
-                backrightDrive.setPower(powerR);
-            }
-            idle();
-        }
-
-        frontleftDrive.setPower(0);
-        backleftDrive.setPower(0);
-        frontrightDrive.setPower(0);
-        backrightDrive.setPower(0);
-    }
-
-*/
     public void turnToTargetYaw(double targetYawDegree, double power, long maxAllowedTimeInMills){
         long timeBegin, timeCurrent;
         double currentYaw = getCurrentYaw();;
@@ -499,47 +281,7 @@ public abstract class AutoHardware extends LinearOpMode {
         }
     }
 
- /*   public void turnToTargetYaw2(double targetYawDegree, double power, long maxAllowedTimeInMills){
-        long timeBegin, timeCurrent;
-        double currentYaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);;
-        int ticks, tickDirection;
-        double factor = 1.0;
 
-        double diffYaw = Math.abs(currentYaw - targetYawDegree);
-        telemetry.addLine(String.format("\nCurrentYaw=%.2f\nTargetYaw=%.2f", currentYaw, targetYawDegree));
-        telemetry.update();
-
-        timeBegin = timeCurrent = System.currentTimeMillis();
-        while (diffYaw > 0.5
-                && opModeIsActive()
-                && ((timeCurrent-timeBegin) < maxAllowedTimeInMills)) {
-            ticks = (int) (diffYaw * ticksPerDegree);
-            if (ticks > 130)
-                ticks = 130;
-
-            tickDirection = (currentYaw < targetYawDegree) ? -1 : 1;
-            if (ticks < 1)
-                break;
-            if (diffYaw > 3)
-                factor = 1.0;
-            else
-                factor = diffYaw / 3;
-            driveMotors(
-                    (int)(tickDirection * ticks),
-                    (int)(tickDirection * ticks),
-                    -(int)(tickDirection * ticks*0.5),
-                    -(int)(tickDirection * ticks*0.5),
-                    power * factor, false, 0);
-            currentYaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            timeCurrent = System.currentTimeMillis();
-            diffYaw = Math.abs(currentYaw - targetYawDegree);
-
-            telemetry.addLine(String.format("\nCurrentYaw=%.2f\nTargetYaw=%.2f\nTimeLapsed=%.2f ms",
-                    currentYaw, targetYawDegree, (double)(timeCurrent-timeBegin)));
-            telemetry.update();
-        }
-    }
-    */
     public void driveMotors(int flTarget, int blTarget, int frTarget, int brTarget,
                              double power,
                              boolean bKeepYaw, double targetYaw){
