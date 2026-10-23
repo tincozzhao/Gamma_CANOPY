@@ -19,7 +19,6 @@ public class OpMode3 extends LinearOpMode {
     public ElapsedTime mRunTime = new ElapsedTime();
 
     RobotHardware robot = new RobotHardware();
-
     private int sleepMs1 = 0;
     private boolean bMoveUpHogback = false;
     private boolean wasPusherMoving = false;
