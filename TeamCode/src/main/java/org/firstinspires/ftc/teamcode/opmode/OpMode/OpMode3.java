@@ -24,6 +24,7 @@ public class OpMode3 extends LinearOpMode {
     private boolean wasPusherMoving = false;
 
 
+
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
