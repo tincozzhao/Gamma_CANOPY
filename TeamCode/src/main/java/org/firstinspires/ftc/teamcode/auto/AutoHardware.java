@@ -32,7 +32,7 @@ public abstract class AutoHardware extends LinearOpMode {
     protected ElapsedTime     runtime = new ElapsedTime();
 
     // For motot encoders
-    protected static final double     COUNTS_PER_MOTOR_REV    = 100 ;    // eg: TETRIX Motor Encoder
+    protected static final double     COUNTS_PER_MOTOR_REV    = 383.6 ;    // eg: TETRIX Motor Encoder
     protected static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     protected static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
