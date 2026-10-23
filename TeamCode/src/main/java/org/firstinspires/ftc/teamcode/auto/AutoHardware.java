@@ -29,6 +29,8 @@ public abstract class AutoHardware extends LinearOpMode {
 
     protected DcMotor         hogback  = null;
 
+    protected DcMotor         intake = null;
+
     protected ElapsedTime     runtime = new ElapsedTime();
 
     // For motot encoders
