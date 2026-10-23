@@ -22,8 +22,7 @@ public class OpMode3 extends LinearOpMode {
     private int sleepMs1 = 0;
     private boolean bMoveUpHogback = false;
     private boolean wasPusherMoving = false;
-
-
+    
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
