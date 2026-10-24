@@ -1,36 +1,44 @@
-
 package org.firstinspires.ftc.teamcode.common.hardware;
 
+
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+
 public class RobotHardware {
+    /* Declare OpMode members. */
+    HardwareMap hwMap =  null;
 
-    // Hardware map
-    HardwareMap hwMap = null;
-
-    // Drive motors
+    // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
     public DcMotor motorfl = null;
     public DcMotor motorfr = null;
     public DcMotor motorbr = null;
+
     public DcMotor motorbl = null;
 
-    // Mechanism motors
-    public DcMotor intake = null;
+
     public DcMotor hogback = null;
+    public DcMotor intake = null;
 
-    // Pusher
+
     public CRServo pusher0 = null;
+    public CRServo pusher1 = null;
+  // public Limelight3A limelight;
 
-    // IMU
     public IMU imu;
 
     // Initial robot orientation
@@ -38,81 +46,63 @@ public class RobotHardware {
     public AngularVelocity angularVelocity0;
     public double yaw0;
 
-    // Constructor
-    public RobotHardware() {
-    }
+    // Define a constructor that allows the OpMode to pass a reference to itself.
+    public RobotHardware() {}
 
-    // Initialize robot hardware
-    public void init(HardwareMap ahwMap) {
-
-        // Save hardware map
+    /**
+     * Initialize all the robot's hardware.
+     * This method must be called ONCE when the OpMode is initialized.
+     *
+     * All of the hardware devices are accessed via the hardware map, and initialized.
+     */
+    public void init(HardwareMap ahwMap)    {
+        // save reference to hardware map
         hwMap = ahwMap;
 
-        // Initialize drive motors
+        // Define and Initialize Motors (note: need to use reference to actual OpMode).
         motorfl = hwMap.get(DcMotor.class, "motorfl");
         motorfr = hwMap.get(DcMotor.class, "motorfr");
         motorbl = hwMap.get(DcMotor.class, "motorbl");
         motorbr = hwMap.get(DcMotor.class, "motorbr");
-
-        // Initialize hogback
         hogback = hwMap.get(DcMotor.class, "hogback");
-
-        // Initialize intake
-        intake = hwMap.get(DcMotor.class, "intake");
-        intake.setDirection(DcMotor.Direction.REVERSE);
-        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intake.setZeroPowerBehavior(
-                DcMotor.ZeroPowerBehavior.BRAKE
-        );
-
-        // Initialize pusher
+       // limelight = hwMap.get(Limelight3A.class, "limelight");
         pusher0 = hwMap.get(CRServo.class, "pusher0");
+        pusher1 = hwMap.get(CRServo.class, "pusher1");
+        intake = hwMap.get(DcMotor.class, "intake");
 
-        // Set drive motor braking
+
+        // set Brake zero power behavior
         motorfr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorfl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Set drive motor directions
         motorfr.setDirection(DcMotor.Direction.REVERSE);
         motorbr.setDirection(DcMotor.Direction.REVERSE);
 
-        // Stop pusher during initialization
         pusher0.setPower(0);
+        pusher1.setPower(0);
+       // limelight.stop();
 
-        // Set drivetrain mode
+        // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         setDrivetrainMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Initialize IMU
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
 
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-
-        RevHubOrientationOnRobot orientationOnRobot =
-                new RevHubOrientationOnRobot(
-                        logoDirection,
-                        usbDirection
-                );
-
+        // Initialize IMU in the control hub
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.resetYaw();
 
-        // Retrieve initial rotational angles and velocities
+        // Retrieve the very initial Rotational Angles and Velocities
         orientation0 = imu.getRobotYawPitchRollAngles();
-        angularVelocity0 =
-                imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-
+        angularVelocity0 = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         yaw0 = orientation0.getYaw(AngleUnit.DEGREES);
     }
 
-    // Set motors for autonomous driving
     public void setAutoDriveMotorMode() {
-
         motorfr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorfl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -129,43 +119,64 @@ public class RobotHardware {
         motorbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    // Get current robot yaw
     public double getCurrentYaw() {
-        return imu.getRobotYawPitchRollAngles()
-                .getYaw(AngleUnit.DEGREES);
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
-    // Set drivetrain run mode
     public void setDrivetrainMode(DcMotor.RunMode mode) {
         motorfl.setMode(mode);
         motorfr.setMode(mode);
         motorbl.setMode(mode);
         motorbr.setMode(mode);
     }
+    public void setDriveForward(double fl, double fr, double bl, double br){
+        if (fl > 1.0)
+            fl = 1.0;
+        else if (fl < -1.0)
+            fl = -1.0;
 
-    // Drive forward
-    public void setDriveForward(
-            double fl, double fr, double bl, double br) {
+        if (fr > 1.0)
+            fr = 1.0;
+        else if (fr < -1.0)
+            fr = -1.0;
 
-        fl = Math.max(-1.0, Math.min(1.0, fl));
-        fr = Math.max(-1.0, Math.min(1.0, fr));
-        bl = Math.max(-1.0, Math.min(1.0, bl));
-        br = Math.max(-1.0, Math.min(1.0, br));
+        if (bl > 1.0)
+            bl = 1.0;
+        else if (bl < -1.0)
+            bl = -1.0;
 
-        motorfl.setPower(-fl);
+        if (br > 1.0)
+            br = 1.0;
+        else if (br < -1.0)
+            br = -1.0;
+
+        motorfl.setPower((-1) * fl);
         motorfr.setPower(fr);
         motorbl.setPower(bl);
         motorbr.setPower(br);
     }
 
-    // Set drivetrain power
-    public void setDrivePower(
-            double fl, double fr, double bl, double br) {
 
-        fl = Math.max(-1.0, Math.min(1.0, fl));
-        fr = Math.max(-1.0, Math.min(1.0, fr));
-        bl = Math.max(-1.0, Math.min(1.0, bl));
-        br = Math.max(-1.0, Math.min(1.0, br));
+    public void setDrivePower(double fl, double fr, double bl, double br) {
+        if (fl > 1.0)
+            fl = 1.0;
+        else if (fl < -1.0)
+            fl = -1.0;
+
+        if (fr > 1.0)
+            fr = 1.0;
+        else if (fr < -1.0)
+            fr = -1.0;
+
+        if (bl > 1.0)
+            bl = 1.0;
+        else if (bl < -1.0)
+            bl = -1.0;
+
+        if (br > 1.0)
+            br = 1.0;
+        else if (br < -1.0)
+            br = -1.0;
 
         motorfl.setPower(fl);
         motorfr.setPower(fr);
@@ -173,8 +184,14 @@ public class RobotHardware {
         motorbr.setPower(br);
     }
 
-    // Set all drive motors to the same power
-    public void setAllDrivePower(double power) {
-        setDrivePower(power, power, power, power);
-    }
+    public void setAllDrivePower(double p){ setDrivePower(p,p,p,p);}
+    // public void setArmPower(double armPower){
+    //   linearSlider.setPower(armPower);
+    //}
+
+
+
+
+
+
 }

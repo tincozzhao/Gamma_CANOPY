@@ -58,10 +58,11 @@ public class OpMode3 extends LinearOpMode {
             // B = STOP
             // =========================
 
-            if (gamepad2.a) {
-                robot.intake.setPower(INTAKE_FORWARD_VELOCITY);
+            if (gamepad2.y) {
+                robot.intake.setPower(0.5);
+            }else if(gamepad2.a){
+                robot.intake.setPower(-0.5);
             }
-
             if (gamepad2.b) {
                 robot.intake.setPower(0.0);
             }
@@ -75,12 +76,14 @@ public class OpMode3 extends LinearOpMode {
             if (gamepad2.left_trigger > 0.5) {
 
                 robot.pusher0.setPower(1.0);
+                robot.pusher1.setPower(-1.0);
                 lastPusherDirection = 1.0;
                 pusherBraking = false;
 
             } else if (gamepad2.left_bumper) {
 
                 robot.pusher0.setPower(-1.0);
+                robot.pusher1.setPower(1.0);
                 lastPusherDirection = -1.0;
                 pusherBraking = false;
 
@@ -88,6 +91,7 @@ public class OpMode3 extends LinearOpMode {
 
                 // Brief counterpulse when the pusher control is released
                 robot.pusher0.setPower(-lastPusherDirection);
+                robot.pusher1.setPower(lastPusherDirection);
                 pusherBrakeTimer.reset();
                 pusherBraking = true;
 
@@ -95,10 +99,12 @@ public class OpMode3 extends LinearOpMode {
                     && pusherBrakeTimer.milliseconds() < 30) {
 
                 robot.pusher0.setPower(-lastPusherDirection);
+                robot.pusher1.setPower(lastPusherDirection);
 
             } else {
 
                 robot.pusher0.setPower(0.0);
+                robot.pusher1.setPower(0.0);
                 lastPusherDirection = 0.0;
                 pusherBraking = false;
             }
