@@ -29,6 +29,8 @@ public abstract class AutoHardware extends LinearOpMode {
 
     protected DcMotor         hogback  = null;
 
+    protected DcMotor         intake  = null;
+
     protected ElapsedTime     runtime = new ElapsedTime();
 
     // For motot encoders
@@ -101,6 +103,14 @@ public abstract class AutoHardware extends LinearOpMode {
         hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
+
+    public void initIntake() {
+
+        intake = hardwareMap.get(DcMotor.class, "intake1");
+
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
     public void initMotor(){
         // Initialize the drive system variables.
         backleftDrive  = hardwareMap.get(DcMotor.class, "motorbl");
@@ -124,6 +134,7 @@ public abstract class AutoHardware extends LinearOpMode {
 
 
         initHogback();
+        initIntake();
     }
 
     public void encoderDrive(double speed,
