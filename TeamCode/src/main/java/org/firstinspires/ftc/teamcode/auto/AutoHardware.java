@@ -80,7 +80,7 @@ public abstract class AutoHardware extends LinearOpMode {
     protected AprilTagProcessor aprilTag;
 
     // servo to place pixel on backboard
-    public CRServo pusher0 = null;
+    public CRServo pusher1 = null;
 
     public void initAll(){
        // initTfodAndAprilTag();
@@ -89,7 +89,7 @@ public abstract class AutoHardware extends LinearOpMode {
         initIMU();
     }
     public void initServo() {
-        pusher0 = hardwareMap.get(CRServo.class, "pusher0");
+        pusher1 = hardwareMap.get(CRServo.class, "pusher0");
 
     }
 
