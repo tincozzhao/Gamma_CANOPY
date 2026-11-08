@@ -39,7 +39,7 @@ public class intaketest extends AutoHardware {
 
                 idle();
             }
-            //
+
             if (opModeIsActive()
                     && hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
 
