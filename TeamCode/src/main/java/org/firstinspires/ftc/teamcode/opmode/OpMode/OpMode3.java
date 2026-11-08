@@ -63,7 +63,7 @@ public class OpMode3 extends LinearOpMode {
 
 
 //make sure one of the directions is correct/reversed
-
+/*
             if (gamepad2.left_trigger_pressed) {
                 robot.pusher0.setPower(1.0);
                 wasPusherMoving = true;
@@ -87,7 +87,7 @@ public class OpMode3 extends LinearOpMode {
                 // Hard stop signal
                 robot.pusher0.setPower(0.0);
             }
-
+*/
 
 
             // 1. Moving Forward
@@ -101,6 +101,23 @@ public class OpMode3 extends LinearOpMode {
 // 3. Joystick is back in the neutral/original position
             else {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_STOP); // Sets power to 0.0
+            }
+
+            // 1. Intake Start
+            if (gamepad2.a) {
+//                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
+                robot.intake2.setPower(BotCoefficients.INTAKE_POWER);
+            }
+// 2. Moving Backward
+      /*      else if (gamepad2.right_stick_y < -0.5) {
+                robot.hogback.setPower(BotCoefficients.INTAKE_POWER);
+            }
+
+       */
+// 3. Joystick is back in the neutral/original position
+            else if (gamepad2.b) {
+//                robot.intake1.setPower(BotCoefficients.INTAKE_STOP); // Sets power to 0.0
+                robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
             }
         }
 

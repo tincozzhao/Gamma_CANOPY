@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -33,7 +32,11 @@ public class RobotHardware {
 
     public DcMotor hogback = null;
 
-    public CRServo pusher0 = null;
+    public Servo gate = null;
+
+    public DcMotor intake1 = null;
+
+    public DcMotor intake2 = null;
   // public Limelight3A limelight;
 
     public IMU imu;
@@ -62,8 +65,10 @@ public class RobotHardware {
         motorbl = hwMap.get(DcMotor.class, "motorbl");
         motorbr = hwMap.get(DcMotor.class, "motorbr");
         hogback = hwMap.get(DcMotor.class, "hogback");
+        intake1 = hwMap.get(DcMotor.class, "intake1");
+        intake2 = hwMap.get(DcMotor.class, "intake2");
        // limelight = hwMap.get(Limelight3A.class, "limelight");
-        pusher0 = hwMap.get(CRServo.class, "pusher0");
+        gate = hwMap.get(Servo.class, "gate");
 
 
         // set Brake zero power behavior
@@ -75,7 +80,7 @@ public class RobotHardware {
         motorfr.setDirection(DcMotor.Direction.REVERSE);
         motorbr.setDirection(DcMotor.Direction.REVERSE);
 
-        pusher0.setPower(0);
+       // gate.setPower(0);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
