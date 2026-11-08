@@ -1,81 +1,73 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-/*
- * This OpMode illustrates the concept of driving a path based on time.
- * The code is structured as a LinearOpMode
- *
- * The code assumes that you do NOT have encoders on the wheels,
- *   otherwise you would use: RobotAutoDriveByEncoder;
- *
- *   The desired path in this example is:
- *   - Drive forward for 3 seconds
- *   - Spin right for 1.3 seconds
- *   - Drive Backward for 1 Second
- *
- *  The code is written in a simple form with no optimizations.
- *  However, there are several ways that this type of sequence could be streamlined,
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
-@Autonomous(name="intaketest", group="Robot")
+@Autonomous(name = "intaketest", group = "Robot")
 public class intaketest extends AutoHardware {
 
+    private static final double HOGBACK_TARGET_VELOCITY = 1600;
+    private static final double HOGBACK_MIN_VELOCITY = 1500;
+
+    private static final double PUSHER0_OPEN = 0.5;
+    private static final double PUSHER0_CLOSED = 0.0;
+
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         initAll();
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
+
+        telemetry.addData("Status", "Ready");
         telemetry.update();
-        // Wait for the game to start (driver presses PLAY)
+
         waitForStart();
-        // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
-        sleep(2000);
-        // /extends out as neg;
 
-        // hi
-        // changed speed from 0.5 to 0.75
-        // encoderDrive(0.75,  50,  50, 9);
-        intake.setPower(0.5);
-        sleep(5000);
-        intake.setPower(0);
-        telemetry.addData(">", "Done");
-        telemetry.update();
-        // sleep(2000);
+        if (opModeIsActive()) {
 
+            // Start hogback
+            hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
+            double startTime = getRuntime();
+
+            // Wait for hogback to reach target velocity
+            while (opModeIsActive()
+                    && hogback.getVelocity() < HOGBACK_MIN_VELOCITY
+                    && getRuntime() - startTime < 4.0) {
+
+                telemetry.addData("Hogback Velocity",
+                        hogback.getVelocity());
+                telemetry.update();
+
+                idle();
+            }
+
+            if (opModeIsActive()
+                    && hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
+
+                // Open pusher0
+                pusher0.setPosition(PUSHER0_OPEN);
+
+                // Activate pusher1
+                pusher1.setPosition(1.0);
+
+                // Start intake
+                intake.setPower(0.3);
+
+                telemetry.addData("Status", "Feeding pollen");
+                telemetry.update();
+
+                sleep(5000);
+
+                // Close pusher0
+                pusher0.setPosition(PUSHER0_CLOSED);
+            }
+
+            // Stop all mechanisms
+            pusher1.setPosition(0);
+            intake.setPower(0);
+            hogback.setVelocity(0);
+
+            telemetry.addData("Status", "Done");
+            telemetry.update();
+        }
     }
 }

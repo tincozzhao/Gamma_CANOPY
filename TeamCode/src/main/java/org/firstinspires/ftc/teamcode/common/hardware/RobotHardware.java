@@ -32,8 +32,11 @@ public class RobotHardware {
 
 
     public DcMotor hogback = null;
+    public DcMotor intake = null;
+
 
     public CRServo pusher0 = null;
+    public CRServo pusher1 = null;
   // public Limelight3A limelight;
 
     public IMU imu;
@@ -64,6 +67,8 @@ public class RobotHardware {
         hogback = hwMap.get(DcMotor.class, "hogback");
        // limelight = hwMap.get(Limelight3A.class, "limelight");
         pusher0 = hwMap.get(CRServo.class, "pusher0");
+        pusher1 = hwMap.get(CRServo.class, "pusher1");
+        intake = hwMap.get(DcMotor.class, "intake");
 
 
         // set Brake zero power behavior
@@ -76,6 +81,7 @@ public class RobotHardware {
         motorbr.setDirection(DcMotor.Direction.REVERSE);
 
         pusher0.setPower(0);
+        pusher1.setPower(0);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
