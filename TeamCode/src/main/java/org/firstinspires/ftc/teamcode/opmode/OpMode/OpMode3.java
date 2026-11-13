@@ -41,10 +41,10 @@ public class OpMode3 extends LinearOpMode {
             double vertical = gamepad1.right_stick_y * 0.6;
             double turn = -1.0 * gamepad1.left_stick_x * 0.6;
 
-            double flPower = vertical + turn + horizontal;
-            double frPower = vertical - turn - horizontal;
-            double blPower = vertical + turn - horizontal;
-            double brPower = vertical - turn + horizontal;
+            double flPower = vertical - turn - horizontal;
+            double frPower = vertical + turn - horizontal;
+            double blPower = vertical - turn + horizontal;
+            double brPower = vertical + turn + horizontal;
             double scaling = Math.max(1.0,
                     Math.max(Math.max(Math.abs(flPower), Math.abs(frPower)),
                             Math.max(Math.abs(blPower), Math.abs(brPower))));
@@ -64,7 +64,7 @@ public class OpMode3 extends LinearOpMode {
 
 //make sure one of the directions is correct/reversed
 
-            if (gamepad2.left_trigger_pressed) {
+/*            if (gamepad2.left_trigger_pressed) {
                 robot.pusher0.setPower(1.0);
                 wasPusherMoving = true;
             } else if (gamepad2.left_bumper) {
@@ -87,12 +87,15 @@ public class OpMode3 extends LinearOpMode {
                 // Hard stop signal
                 robot.pusher0.setPower(0.0);
             }
-
+*/
 
 
             // 1. Moving Forward
             if (gamepad2.right_stick_y > 0.5 ) {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
+//                currentVelocity = robot.hogback.getVelocity();
+//                while (robot.hogback.getVelocity() < BotCoefficients.HOGBACK_MIN_VELOCITY) {
+
             }
 // 2. Moving Backward
             else if (gamepad2.right_stick_y < -0.5) {
@@ -101,6 +104,23 @@ public class OpMode3 extends LinearOpMode {
 // 3. Joystick is back in the neutral/original position
             else {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_STOP); // Sets power to 0.0
+            }
+
+            // 1. Intake Start
+            if (gamepad2.a) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
+                robot.intake2.setPower(BotCoefficients.INTAKE_POWER);
+            }
+// 2. Moving Backward
+      /*      else if (gamepad2.) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
+            }
+
+       */
+// 3. Joystick is back in the neutral/original position
+            else if (gamepad2.b) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_STOP); // Sets power to 0.0
+                robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
             }
         }
 

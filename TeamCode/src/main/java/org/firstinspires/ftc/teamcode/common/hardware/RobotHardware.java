@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -30,10 +31,14 @@ public class RobotHardware {
 
     public DcMotor motorbl = null;
 
+    public DcMotorEx hogback = null;
 
-    public DcMotor hogback = null;
+    public Servo gate = null;
 
-    public CRServo pusher0 = null;
+    public DcMotor intake1 = null;
+
+    public DcMotor intake2 = null;
+
   // public Limelight3A limelight;
 
     public IMU imu;
@@ -61,9 +66,11 @@ public class RobotHardware {
         motorfr = hwMap.get(DcMotor.class, "motorfr");
         motorbl = hwMap.get(DcMotor.class, "motorbl");
         motorbr = hwMap.get(DcMotor.class, "motorbr");
-        hogback = hwMap.get(DcMotor.class, "hogback");
+        hogback = hwMap.get(DcMotorEx.class, "hogback");
+        intake1 = hwMap.get(DcMotor.class, "intake1");
+        intake2 = hwMap.get(DcMotor.class, "intake2");
        // limelight = hwMap.get(Limelight3A.class, "limelight");
-        pusher0 = hwMap.get(CRServo.class, "pusher0");
+        gate = hwMap.get(Servo.class, "gate");
 
 
         // set Brake zero power behavior
@@ -72,10 +79,13 @@ public class RobotHardware {
         motorbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hogback.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorfr.setDirection(DcMotor.Direction.REVERSE);
-        motorbr.setDirection(DcMotor.Direction.REVERSE);
+        intake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorfl.setDirection(DcMotor.Direction.REVERSE);
+        motorbl.setDirection(DcMotor.Direction.REVERSE);
 
-        pusher0.setPower(0);
+       // gate.setPower(0);
+        gate.setPosition(0.0);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
