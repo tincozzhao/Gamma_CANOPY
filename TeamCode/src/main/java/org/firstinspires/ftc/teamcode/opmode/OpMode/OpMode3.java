@@ -74,14 +74,14 @@ public class OpMode3 extends LinearOpMode {
 
 
             // 1. Moving Forward
-            if (gamepad2.right_stick_y > 0.5 ) {
+            if (gamepad2.right_stick_y < -0.5 ) {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
 //                currentVelocity = robot.hogback.getVelocity();
 //                while (robot.hogback.getVelocity() < BotCoefficients.HOGBACK_MIN_VELOCITY) {
 
             }
 // 2. Moving Backward
-            else if (gamepad2.right_stick_y < -0.5) {
+            else if (gamepad2.right_stick_y > 0.5) {
                 robot.hogback.setPower(BotCoefficients.HOGBACK_POWERDOWN);
             }
 // 3. Joystick is back in the neutral/original position
@@ -148,7 +148,7 @@ public class OpMode3 extends LinearOpMode {
                 robot.gate.setPosition(GATE_CLOSED);
                 robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
-                if (robot.hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
+                if (robot.hogback.getVelocity() <= HOGBACK_MIN_VELOCITY) {
                     robot.gate.setPosition(GATE_OPEN);
                     launchState = RobotHardware.LaunchState.OPEN;
                 }
@@ -164,7 +164,7 @@ public class OpMode3 extends LinearOpMode {
 
                 robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
-                if (robot.hogback.getVelocity() < HOGBACK_MIN_VELOCITY) {
+                if (robot.hogback.getVelocity() > HOGBACK_MIN_VELOCITY) {
                     robot.gate.setPosition(GATE_CLOSED);
                     launchState = RobotHardware.LaunchState.CLOSED;
                 } else {
