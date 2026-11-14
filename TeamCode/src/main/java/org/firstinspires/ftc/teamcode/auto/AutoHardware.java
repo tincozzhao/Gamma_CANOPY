@@ -27,11 +27,11 @@ public abstract class AutoHardware extends LinearOpMode {
     protected DcMotorEx hogback = null;
 
     // Intake motor
-    protected DcMotor intake = null;
+    protected DcMotor intake1 = null;
+    protected DcMotor intake2 = null;
 
     // Pusher servos
-    public Servo pusher0 = null;
-    public Servo pusher1 = null;
+    protected Servo gate = null;
 
     // Timer
     protected ElapsedTime runtime = new ElapsedTime();
@@ -83,8 +83,7 @@ public abstract class AutoHardware extends LinearOpMode {
     // Initialize pusher servos
     public void initServo() {
 
-        pusher0 = hardwareMap.get(Servo.class, "pusher0");
-        pusher1 = hardwareMap.get(Servo.class, "pusher1");
+        gate = hardwareMap.get(Servo.class, "gate");
     }
 
 
@@ -101,14 +100,16 @@ public abstract class AutoHardware extends LinearOpMode {
 
 
     // Initialize intake
-    public void initIntake() {
+    public void initIntakes() {
 
-        intake = hardwareMap.get(DcMotor.class, "intake");
+        intake1 = hardwareMap.get(DcMotor.class, "intake1");
+        intake2 = hardwareMap.get(DcMotor.class, "intake2");
 
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        intake.setZeroPowerBehavior(
-                DcMotor.ZeroPowerBehavior.BRAKE);
+        intake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
 
@@ -139,7 +140,7 @@ public abstract class AutoHardware extends LinearOpMode {
 
         // Initialize other motors
         initHogback();
-        initIntake();
+        initIntakes();
     }
 
 

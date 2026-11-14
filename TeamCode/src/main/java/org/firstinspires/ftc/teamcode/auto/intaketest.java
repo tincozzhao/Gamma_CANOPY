@@ -44,30 +44,31 @@ public class intaketest extends AutoHardware {
                     && hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
 
                 // Open pusher0
-                pusher0.setPosition(PUSHER0_OPEN);
+//                pusher0.setPosition(PUSHER0_OPEN);
+//
+//                // Activate pusher1
+//                pusher1.setPosition(1.0);
+//
+//                // Start intake
+//                intake.setPower(0.3);
+//
+//                telemetry.addData("Status", "Feeding pollen");
+//                telemetry.update();
+//
+//                sleep(5000);
+//
+//                // Close pusher0
+//                pusher0.setPosition(PUSHER0_CLOSED);
+//            }
+//
+//            // Stop all mechanisms
+//            pusher1.setPosition(0);
+//            intake.setPower(0);
+                hogback.setVelocity(0);
 
-                // Activate pusher1
-                pusher1.setPosition(1.0);
-
-                // Start intake
-                intake.setPower(0.3);
-
-                telemetry.addData("Status", "Feeding pollen");
+                telemetry.addData("Status", "Done");
                 telemetry.update();
-
-                sleep(5000);
-
-                // Close pusher0
-                pusher0.setPosition(PUSHER0_CLOSED);
             }
-
-            // Stop all mechanisms
-            pusher1.setPosition(0);
-            intake.setPower(0);
-            hogback.setVelocity(0);
-
-            telemetry.addData("Status", "Done");
-            telemetry.update();
         }
     }
 }
