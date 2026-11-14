@@ -102,7 +102,7 @@ public class RobotHardware {
         );
 
        // gate.setPower(0);
-        gate.setPosition(0.0);
+        gate.setPosition(0.45);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy

@@ -29,6 +29,9 @@ public class OpMode3 extends LinearOpMode {
     private boolean wasPusherMoving = false;
     RobotHardware.LaunchState launchState = null;
 
+    public static final double GATE_OPEN = 1.0;
+    public static final double GATE_CLOSED = 0.45; // Fully closed position
+
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
@@ -70,33 +73,45 @@ public class OpMode3 extends LinearOpMode {
             ));
 
 
-//make sure one of the directions is correct/reversed
+            // 1. Moving Forward
+            if (gamepad2.right_stick_y > 0.5 ) {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
+//                currentVelocity = robot.hogback.getVelocity();
+//                while (robot.hogback.getVelocity() < BotCoefficients.HOGBACK_MIN_VELOCITY) {
 
-/* = -0.4;  // pulse forward
-                    }
-                    robot.pusher0.setPower(brakePower);
-                    sleep(30); // 30ms har            if (gamepad2.left_trigger_pressed) {
-                robot.pusher0.setPower(1.0);
-                wasPusherMoving = true;
-            } else if (gamepad2.left_bumper) {
-                robot.pusher0.setPower(-1.0);
-                wasPusherMoving = true;
-            } else {
-                // fire a tiny counter-pulse to stop movement
-                if (wasPusherMoving) {
-                    double brakePower;
-                    if (robot.pusher0.getPower() < 0) { // 2 conditions: forward or backward
-                        brakePower = 0.4;   // pulse backward
-                    } else {
-                        brakePowerdware pulse to stop completely
-                    wasPusherMoving = false;
-                }
-
-                // Hard stop signal
-                robot.pusher0.setPower(0.0);
             }
-*/
+// 2. Moving Backward
+            else if (gamepad2.right_stick_y < -0.5) {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERDOWN);
+            }
+// 3. Joystick is back in the neutral/original position
+            else {
+                robot.hogback.setPower(BotCoefficients.HOGBACK_STOP); // Sets power to 0.0
+            }
 
+            // 1. Intake Start
+            if (gamepad2.a) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
+                robot.intake2.setPower(BotCoefficients.INTAKE_POWER);
+            }
+// 2. Moving Backward
+            else if (gamepad2.x) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_REVERSE);
+                robot.intake2.setPower(BotCoefficients.INTAKE_REVERSE);
+            }
+
+
+// 3. Joystick is back in the neutral/original position
+            else if (gamepad2.b) {
+                robot.intake1.setPower(BotCoefficients.INTAKE_STOP); // Sets power to 0.0
+                robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
+            }
+
+            if (gamepad2.dpad_right) {
+                robot.gate.setPosition(GATE_OPEN);
+            } else if (gamepad2.dpad_left) {
+                robot.gate.setPosition(GATE_CLOSED);
+            }
 
             // Launch state machine
             launch(gamepad2.right_stick_y < -0.5);
@@ -107,10 +122,7 @@ public class OpMode3 extends LinearOpMode {
         }
     }
 
-    public static final double GATE_OPEN = 1.0;
-    public static final double GATE_CLOSED = 0.0; // Fully closed position
-
-    private void launch(boolean shotRequested) {
+    public void launch(boolean shotRequested) {
         if (launchState == null) {
             launchState = IDLE;
         }
@@ -162,3 +174,8 @@ public class OpMode3 extends LinearOpMode {
         }
     }
 }
+
+
+
+
+
