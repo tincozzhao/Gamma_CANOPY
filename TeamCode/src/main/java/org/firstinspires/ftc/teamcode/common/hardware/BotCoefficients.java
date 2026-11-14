@@ -14,4 +14,6 @@ public class BotCoefficients {
     public static final double HOGBACK_TARGET_VELOCITY = -1050;
     public static final double HOGBACK_MIN_VELOCITY = -950;
 
+
+
 }

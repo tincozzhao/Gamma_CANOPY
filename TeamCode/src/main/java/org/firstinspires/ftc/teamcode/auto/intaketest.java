@@ -5,11 +5,22 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "intaketest", group = "Robot")
 public class intaketest extends AutoHardware {
 
-    private static final double HOGBACK_TARGET_VELOCITY = 1600;
-    private static final double HOGBACK_MIN_VELOCITY = 1500;
+    public static final double HOGBACK_POWERUP = -0.8;
+    public static final double HOGBACK_POWERDOWN = 0.8;
+    public static final double HOGBACK_STOP = 0.0;
 
-    private static final double PUSHER0_OPEN = 0.5;
-    private static final double PUSHER0_CLOSED = 0.0;
+    public static final double INTAKE_POWER = 0.4;
+    public static final double INTAKE_REVERSE = -0.4;
+
+    public static final double INTAKE_STOP = 0.0;
+
+    public static final double HOGBACK_TARGET_VELOCITY = -1050;
+    public static final double HOGBACK_MIN_VELOCITY = -950;
+
+    public static final double GATE_OPEN = 1.0;
+    public static final double GATE_CLOSED = 0.45; // Fully closed position
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,7 +41,7 @@ public class intaketest extends AutoHardware {
 
             // Wait for hogback to reach target velocity
             while (opModeIsActive()
-                    && hogback.getVelocity() < HOGBACK_MIN_VELOCITY
+                    && hogback.getVelocity() > HOGBACK_MIN_VELOCITY
                     && getRuntime() - startTime < 4.0) {
 
                 telemetry.addData("Hogback Velocity",
@@ -40,30 +51,21 @@ public class intaketest extends AutoHardware {
                 idle();
             }
 //
-            if (opModeIsActive()
-                    && hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
+            if (opModeIsActive() && hogback.getVelocity() <= HOGBACK_MIN_VELOCITY) {
 
-                // Open pusher0
-//                pusher0.setPosition(PUSHER0_OPEN);
-//
-//                // Activate pusher1
-//                pusher1.setPosition(1.0);
-//
-//                // Start intake
-//                intake.setPower(0.3);
-//
-//                telemetry.addData("Status", "Feeding pollen");
-//                telemetry.update();
-//
-//                sleep(5000);
-//
-//                // Close pusher0
-//                pusher0.setPosition(PUSHER0_CLOSED);
-//            }
-//
-//            // Stop all mechanisms
-//            pusher1.setPosition(0);
-//            intake.setPower(0);
+                intake1.setPower(INTAKE_POWER);
+                intake2.setPower(INTAKE_POWER);
+                sleep(2000);
+                gate.setPosition(GATE_OPEN);
+
+                telemetry.addData("Status", "Feeding pollen");
+                telemetry.update();
+
+                sleep(5000);
+
+                intake1.setPower(INTAKE_STOP);
+                intake2.setPower(INTAKE_STOP);
+                gate.setPosition(GATE_CLOSED);
                 hogback.setVelocity(0);
 
                 telemetry.addData("Status", "Done");
