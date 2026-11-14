@@ -126,7 +126,7 @@ public class OpMode3 extends LinearOpMode {
             if (gamepad2.dpad_right) {
                 robot.gate.setPosition(0.6);
             } else if (gamepad2.dpad_left) {
-                robot.gate.setPosition(0.0);
+                robot.gate.setPosition(0.5);
             }
         }
 
