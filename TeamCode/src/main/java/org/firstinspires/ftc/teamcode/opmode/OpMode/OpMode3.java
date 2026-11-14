@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.OpMode;
 
+import static org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients.HOGBACK_MIN_VELOCITY;
+import static org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients.HOGBACK_TARGET_VELOCITY;
+import static org.firstinspires.ftc.teamcode.common.hardware.RobotHardware.LaunchState.IDLE;
+
 import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,7 +15,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
-
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 //a
 @TeleOp(name = "OpMode3")
 
@@ -23,6 +27,7 @@ public class OpMode3 extends LinearOpMode {
     private int sleepMs1 = 0;
     private boolean bMoveUpHogback = false;
     private boolean wasPusherMoving = false;
+    RobotHardware.LaunchState launchState = null;
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -32,6 +37,9 @@ public class OpMode3 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap);
+        telemetry.addData("Status", "Initialized");
+        telemetry.setMsTransmissionInterval(11);
+
 
         // Put initialization blocks here.
 
@@ -64,7 +72,10 @@ public class OpMode3 extends LinearOpMode {
 
 //make sure one of the directions is correct/reversed
 
-/*            if (gamepad2.left_trigger_pressed) {
+/* = -0.4;  // pulse forward
+                    }
+                    robot.pusher0.setPower(brakePower);
+                    sleep(30); // 30ms har            if (gamepad2.left_trigger_pressed) {
                 robot.pusher0.setPower(1.0);
                 wasPusherMoving = true;
             } else if (gamepad2.left_bumper) {
@@ -77,10 +88,7 @@ public class OpMode3 extends LinearOpMode {
                     if (robot.pusher0.getPower() < 0) { // 2 conditions: forward or backward
                         brakePower = 0.4;   // pulse backward
                     } else {
-                        brakePower = -0.4;  // pulse forward
-                    }
-                    robot.pusher0.setPower(brakePower);
-                    sleep(30); // 30ms hardware pulse to stop completely
+                        brakePowerdware pulse to stop completely
                     wasPusherMoving = false;
                 }
 
@@ -90,46 +98,67 @@ public class OpMode3 extends LinearOpMode {
 */
 
 
-            // 1. Moving Forward
-            if (gamepad2.right_stick_y > 0.5 ) {
-                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERUP);
-//                currentVelocity = robot.hogback.getVelocity();
-//                while (robot.hogback.getVelocity() < BotCoefficients.HOGBACK_MIN_VELOCITY) {
+            // Launch state machine
+            launch(gamepad2.right_stick_y < -0.5);
 
-            }
-// 2. Moving Backward
-            else if (gamepad2.right_stick_y < -0.5) {
-                robot.hogback.setPower(BotCoefficients.HOGBACK_POWERDOWN);
-            }
-// 3. Joystick is back in the neutral/original position
-            else {
-                robot.hogback.setPower(BotCoefficients.HOGBACK_STOP); // Sets power to 0.0
-            }
+            telemetry.addData("Hogback Velocity", robot.hogback.getVelocity());
+            telemetry.addData("Launch State", launchState);
+            telemetry.update();
+        }
+    }
 
-            // 1. Intake Start
-            if (gamepad2.a) {
-                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
-                robot.intake2.setPower(BotCoefficients.INTAKE_POWER);
-            }
-// 2. Moving Backward
-      /*      else if (gamepad2.) {
-                robot.intake1.setPower(BotCoefficients.INTAKE_POWER);
-            }
+    public static final double GATE_OPEN = 1.0;
+    public static final double GATE_CLOSED = 0.0; // Fully closed position
 
-       */
-// 3. Joystick is back in the neutral/original position
-            else if (gamepad2.b) {
-                robot.intake1.setPower(BotCoefficients.INTAKE_STOP); // Sets power to 0.0
-                robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
-            }
-
-            if (gamepad2.dpad_right) {
-                robot.gate.setPosition(0.6);
-            } else if (gamepad2.dpad_left) {
-                robot.gate.setPosition(0.5);
-            }
+    private void launch(boolean shotRequested) {
+        if (launchState == null) {
+            launchState = IDLE;
         }
 
+        switch (launchState) {
+            case IDLE:
+                robot.gate.setPosition(GATE_CLOSED);
+                robot.hogback.setPower(BotCoefficients.HOGBACK_STOP);
 
+                if (shotRequested) {
+                    launchState = RobotHardware.LaunchState.CLOSED;
+                }
+                break;
+
+            case CLOSED:
+                if (!shotRequested) {
+                    robot.gate.setPosition(GATE_CLOSED);
+                    robot.hogback.setPower(BotCoefficients.HOGBACK_STOP);
+                    launchState = IDLE;
+                    break;
+                }
+
+                robot.gate.setPosition(GATE_CLOSED);
+                robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
+
+                if (robot.hogback.getVelocity() >= HOGBACK_MIN_VELOCITY) {
+                    robot.gate.setPosition(GATE_OPEN);
+                    launchState = RobotHardware.LaunchState.OPEN;
+                }
+                break;
+
+            case OPEN:
+                if (!shotRequested) {
+                    robot.gate.setPosition(GATE_CLOSED);
+                    robot.hogback.setPower(BotCoefficients.HOGBACK_STOP);
+                    launchState = IDLE;
+                    break;
+                }
+
+                robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
+
+                if (robot.hogback.getVelocity() < HOGBACK_MIN_VELOCITY) {
+                    robot.gate.setPosition(GATE_CLOSED);
+                    launchState = RobotHardware.LaunchState.CLOSED;
+                } else {
+                    robot.gate.setPosition(GATE_OPEN);
+                }
+                break;
+        }
     }
 }

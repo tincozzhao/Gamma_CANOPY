@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.opmode.OpMode.OpMode3;
 
 
 public class RobotHardware {
@@ -47,6 +49,14 @@ public class RobotHardware {
     public YawPitchRollAngles orientation0;
     public AngularVelocity angularVelocity0;
     public double yaw0;
+
+    public enum LaunchState {
+        IDLE,
+        CLOSED,
+        OPEN,
+    }
+    public LaunchState launchState;
+
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware() {}
@@ -83,9 +93,16 @@ public class RobotHardware {
         intake2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorfl.setDirection(DcMotor.Direction.REVERSE);
         motorbl.setDirection(DcMotor.Direction.REVERSE);
+        hogback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hogback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        hogback.setPIDFCoefficients(
+                DcMotor.RunMode.RUN_USING_ENCODER,
+                new PIDFCoefficients(10, 3, 0, 12)
+        );
 
        // gate.setPower(0);
-        gate.setPosition(0.5);
+        gate.setPosition(0.0);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
@@ -104,6 +121,7 @@ public class RobotHardware {
         orientation0 = imu.getRobotYawPitchRollAngles();
         angularVelocity0 = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         yaw0 = orientation0.getYaw(AngleUnit.DEGREES);
+        launchState = LaunchState.IDLE;
     }
 
     public void setAutoDriveMotorMode() {
