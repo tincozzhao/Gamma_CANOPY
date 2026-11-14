@@ -122,6 +122,12 @@ public class OpMode3 extends LinearOpMode {
                 robot.intake1.setPower(BotCoefficients.INTAKE_STOP); // Sets power to 0.0
                 robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
             }
+
+            if (gamepad2.dpad_right) {
+                robot.gate.setPosition(0.6);
+            } else if (gamepad2.dpad_left) {
+                robot.gate.setPosition(0.0);
+            }
         }
 
 
