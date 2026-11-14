@@ -107,14 +107,15 @@ public class OpMode3 extends LinearOpMode {
                 robot.intake2.setPower(BotCoefficients.INTAKE_STOP);
             }
 
+            // Launch state machine
+            launch(gamepad2.right_stick_y < -0.5);
+
+            // Manual D-pad override (runs AFTER launch() so player inputs OVERWRITE automatic gate position)
             if (gamepad2.dpad_right) {
                 robot.gate.setPosition(GATE_OPEN);
             } else if (gamepad2.dpad_left) {
                 robot.gate.setPosition(GATE_CLOSED);
             }
-
-            // Launch state machine
-            launch(gamepad2.right_stick_y < -0.5);
 
             telemetry.addData("Hogback Velocity", robot.hogback.getVelocity());
             telemetry.addData("Launch State", launchState);
@@ -148,7 +149,7 @@ public class OpMode3 extends LinearOpMode {
                 robot.gate.setPosition(GATE_CLOSED);
                 robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
-                if (robot.hogback.getVelocity() <= HOGBACK_MIN_VELOCITY) {
+                if (robot.hogback.getVelocity() <= HOGBACK_MIN_VELOCITY || gamepad2.dpad_right) {
                     robot.gate.setPosition(GATE_OPEN);
                     launchState = RobotHardware.LaunchState.OPEN;
                 }
@@ -164,7 +165,7 @@ public class OpMode3 extends LinearOpMode {
 
                 robot.hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
-                if (robot.hogback.getVelocity() > HOGBACK_MIN_VELOCITY) {
+                if (gamepad2.dpad_left || robot.hogback.getVelocity() > HOGBACK_MIN_VELOCITY) {
                     robot.gate.setPosition(GATE_CLOSED);
                     launchState = RobotHardware.LaunchState.CLOSED;
                 } else {

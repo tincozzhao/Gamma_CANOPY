@@ -68,7 +68,7 @@ public class leave_parkingzone extends AutoHardware {
 
         // hi
         // changed speed from 0.5 to 0.75
-        encoderDrive(0.75,  50,  50, 9);
+        encoderDrive(0.75,  -50,  -50, 9);
 
         sleep(2000);
 
