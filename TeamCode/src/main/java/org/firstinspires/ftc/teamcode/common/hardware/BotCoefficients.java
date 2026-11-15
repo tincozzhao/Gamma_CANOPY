@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
 public class BotCoefficients {
+    public static final double GATE_OPEN = 1.0;
+    public static final double GATE_CLOSED = 0.45;
 
     public static final double HOGBACK_POWERUP = -0.8;
     public static final double HOGBACK_POWERDOWN = 0.8;

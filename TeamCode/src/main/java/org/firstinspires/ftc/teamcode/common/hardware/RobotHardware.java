@@ -72,15 +72,15 @@ public class RobotHardware {
         hwMap = ahwMap;
 
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
-        motorfl = hwMap.get(DcMotor.class, "motorfl");
-        motorfr = hwMap.get(DcMotor.class, "motorfr");
-        motorbl = hwMap.get(DcMotor.class, "motorbl");
-        motorbr = hwMap.get(DcMotor.class, "motorbr");
-        hogback = hwMap.get(DcMotorEx.class, "hogback");
-        intake1 = hwMap.get(DcMotor.class, "intake1");
-        intake2 = hwMap.get(DcMotor.class, "intake2");
+        motorfl = hwMap.get(DcMotor.class, HardwareNames.FRONT_LEFT);
+        motorfr = hwMap.get(DcMotor.class, HardwareNames.FRONT_RIGHT);
+        motorbl = hwMap.get(DcMotor.class, HardwareNames.BACK_LEFT);
+        motorbr = hwMap.get(DcMotor.class, HardwareNames.BACK_RIGHT);
+        hogback = hwMap.get(DcMotorEx.class, HardwareNames.HOGBACK);
+        intake1 = hwMap.get(DcMotor.class, HardwareNames.INTAKE_1);
+        intake2 = hwMap.get(DcMotor.class, HardwareNames.INTAKE_2);
        // limelight = hwMap.get(Limelight3A.class, "limelight");
-        gate = hwMap.get(Servo.class, "gate");
+        gate = hwMap.get(Servo.class, HardwareNames.GATE);
 
 
         // set Brake zero power behavior
@@ -102,7 +102,7 @@ public class RobotHardware {
         );
 
        // gate.setPower(0);
-        gate.setPosition(0.45);
+        gate.setPosition(BotCoefficients.GATE_CLOSED);
        // limelight.stop();
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
@@ -113,7 +113,7 @@ public class RobotHardware {
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        imu = hwMap.get(IMU.class, "imu");
+        imu = hwMap.get(IMU.class, HardwareNames.IMU);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.resetYaw();
 
