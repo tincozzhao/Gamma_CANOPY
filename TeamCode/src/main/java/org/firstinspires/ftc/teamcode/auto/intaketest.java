@@ -11,66 +11,104 @@ public class intaketest extends AutoHardware {
 
     public static final double INTAKE_POWER = 0.4;
     public static final double INTAKE_REVERSE = -0.4;
-
     public static final double INTAKE_STOP = 0.0;
 
     public static final double HOGBACK_TARGET_VELOCITY = -1050;
     public static final double HOGBACK_MIN_VELOCITY = -950;
 
     public static final double GATE_OPEN = 1.0;
-    public static final double GATE_CLOSED = 0.45; // Fully closed position
-
-
+    public static final double GATE_CLOSED = 0.45;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         initAll();
 
+        // Initial state
+        hogback.setVelocity(0);
+        intake1.setPower(0);
+        intake2.setPower(0);
+        gate.setPosition(GATE_CLOSED);
+
         telemetry.addData("Status", "Ready");
         telemetry.update();
 
         waitForStart();
 
-        if (opModeIsActive()) {
+        if (!opModeIsActive()) {
+            return;
+        }
 
-            // Start hogback
+        try {
+
+            // Start Hogback
             hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
 
             double startTime = getRuntime();
+            boolean hogbackReady = false;
 
-            // Wait for hogback to reach target velocity
+            // Wait for Hogback to reach target velocity
             while (opModeIsActive()
-                    && hogback.getVelocity() > HOGBACK_MIN_VELOCITY
                     && getRuntime() - startTime < 4.0) {
 
-                telemetry.addData("Hogback Velocity",
-                        hogback.getVelocity());
+                double velocity = hogback.getVelocity();
+
+                telemetry.addData("Hogback Velocity", velocity);
+                telemetry.addData("Target Velocity",
+                        HOGBACK_TARGET_VELOCITY);
+
+                if (velocity <= HOGBACK_MIN_VELOCITY) {
+                    hogbackReady = true;
+                    break;
+                }
+
+                telemetry.addData("Status", "Waiting for Hogback");
                 telemetry.update();
 
                 idle();
             }
-//
-            if (opModeIsActive() && hogback.getVelocity() <= HOGBACK_MIN_VELOCITY) {
 
+            if (opModeIsActive() && hogbackReady) {
+
+                telemetry.addData("Status", "Hogback Ready");
+                telemetry.update();
+
+                // Start intake
                 intake1.setPower(INTAKE_POWER);
                 intake2.setPower(INTAKE_POWER);
+
                 sleep(2000);
-                gate.setPosition(GATE_OPEN);
 
-                telemetry.addData("Status", "Feeding pollen");
-                telemetry.update();
+                if (opModeIsActive()) {
 
-                sleep(5000);
+                    // Open gate
+                    gate.setPosition(GATE_OPEN);
 
-                intake1.setPower(INTAKE_STOP);
-                intake2.setPower(INTAKE_STOP);
-                gate.setPosition(GATE_CLOSED);
-                hogback.setVelocity(0);
+                    telemetry.addData("Status", "Feeding pollen");
+                    telemetry.update();
 
-                telemetry.addData("Status", "Done");
+                    sleep(5000);
+                }
+
+            } else if (opModeIsActive()) {
+
+                telemetry.addData("Status",
+                        "ERROR: Hogback failed to reach velocity");
                 telemetry.update();
             }
+
+        } finally {
+
+            // Stop all motors
+            hogback.setVelocity(0);
+            intake1.setPower(INTAKE_STOP);
+            intake2.setPower(INTAKE_STOP);
+
+            // Close gate
+            gate.setPosition(GATE_CLOSED);
+
+            telemetry.addData("Status", "Stopped");
+            telemetry.update();
         }
     }
 }
