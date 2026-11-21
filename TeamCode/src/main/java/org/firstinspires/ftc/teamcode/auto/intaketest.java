@@ -8,7 +8,9 @@ public class intaketest extends AutoHardware {
     public static final double HOGBACK_POWERUP = -0.8;
     public static final double HOGBACK_POWERDOWN = 0.8;
     public static final double HOGBACK_STOP = 0.0;
+    public static final double AUTO_TARGET_VELOCITY = -1200;
 
+    public static final double AUTO_MIN_VELOCITY = -1100;
     public static final double INTAKE_POWER = 0.4;
     public static final double INTAKE_REVERSE = -0.4;
     public static final double INTAKE_STOP = 0.0;
@@ -42,7 +44,7 @@ public class intaketest extends AutoHardware {
         try {
 
             // Start Hogback
-            hogback.setVelocity(HOGBACK_TARGET_VELOCITY);
+            hogback.setVelocity(AUTO_TARGET_VELOCITY);
 
             double startTime = getRuntime();
             boolean hogbackReady = false;
@@ -55,9 +57,9 @@ public class intaketest extends AutoHardware {
 
                 telemetry.addData("Hogback Velocity", velocity);
                 telemetry.addData("Target Velocity",
-                        HOGBACK_TARGET_VELOCITY);
+                        AUTO_TARGET_VELOCITY);
 
-                if (velocity <= HOGBACK_MIN_VELOCITY) {
+                if (velocity <= AUTO_MIN_VELOCITY) {
                     hogbackReady = true;
                     break;
                 }
