@@ -2,25 +2,11 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+import static org.firstinspires.ftc.teamcode.common.hardware.BotCoefficients.*;
+
 @Autonomous(name = "intaketest", group = "Robot")
-public class intaketest extends AutoHardware {
-
-    public static final double HOGBACK_POWERUP = -0.8;
-    public static final double HOGBACK_POWERDOWN = 0.8;
-    public static final double HOGBACK_STOP = 0.0;
-
-    public static final double INTAKE_POWER = 0.4;
-    public static final double INTAKE_REVERSE = -0.4;
-
-    public static final double INTAKE_STOP = 0.0;
-
-    public static final double HOGBACK_TARGET_VELOCITY = -1050;
-    public static final double HOGBACK_MIN_VELOCITY = -950;
-
-    public static final double GATE_OPEN = 1.0;
-    public static final double GATE_CLOSED = 0.45; // Fully closed position
-
-
+public class intaketest extends RobotHardware {
 
     @Override
     public void runOpMode() throws InterruptedException {

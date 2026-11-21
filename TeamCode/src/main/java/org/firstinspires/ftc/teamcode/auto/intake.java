@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+
 /*
  * This OpMode illustrates the concept of driving a path based on time.
  * The code is structured as a LinearOpMode
@@ -51,7 +53,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  */
 
 @Autonomous(name="intake", group="Robot")
-public class intake extends AutoHardware {
+public class intake extends RobotHardware {
 
     @Override
     public void runOpMode() {
