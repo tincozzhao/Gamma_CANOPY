@@ -18,5 +18,9 @@ public class BotCoefficients {
 
     public static final double AUTO_MIN_VELOCITY = -1100;
 
+    public static final double GATE_OPEN = 0.45;
+
+    public static final double GATE_CLOSED = 0.0;
+
 
 }
