@@ -49,10 +49,10 @@ public class OpMode4 extends LinearOpMode {
             double vertical = gamepad1.right_stick_y * 0.6;
             double turn = -1.0 * gamepad1.left_stick_x * 0.6;
 
-            double flPower = vertical - turn - horizontal;
-            double frPower = vertical + turn - horizontal;
-            double blPower = vertical - turn + horizontal;
-            double brPower = vertical + turn + horizontal;
+            double flPower = vertical + turn - horizontal;
+            double frPower = vertical - turn - horizontal;
+            double blPower = vertical + turn + horizontal;
+            double brPower = vertical - turn - horizontal;
             double scaling = Math.max(1.0,
                     Math.max(Math.max(Math.abs(flPower), Math.abs(frPower)),
                             Math.max(Math.abs(blPower), Math.abs(brPower))));
